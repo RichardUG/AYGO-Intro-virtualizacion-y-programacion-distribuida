@@ -166,3 +166,5 @@ Trás ejecutar el comando dependiendo si estamos ejecutándolo en aws o en nuest
     ```
     http://(DNS público maquina EC2):42000/hello
     ```
+
+    ![](/img/despliegueAWS.PNG)
