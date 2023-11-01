@@ -19,30 +19,6 @@ services:
       - "27017:27017"
     command: mongod
 
-  firstdockercontainer:
-    build:
-      context: .
-      dockerfile: src/Dockerfile
-    container_name: firstdockercontainer
-    ports:
-      - "34000:6000"
-
-  firstdockercontainer2:
-    build:
-      context: .
-      dockerfile: src/Dockerfile
-    container_name: firstdockercontainer2
-    ports:
-      - "34001:6000"
-
-  firstdockercontainer3:
-    build:
-      context: .
-      dockerfile: src/Dockerfile
-    container_name: firstdockercontainer3
-    ports:
-      - "34002:6000"
-
 volumes:
   mongodb:
   mongodb_config:

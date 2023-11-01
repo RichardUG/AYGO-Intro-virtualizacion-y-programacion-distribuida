@@ -1,10 +1,12 @@
-# RoundRobinyLogsService-DockeryAWS
+# TALLER DE INTRODUCCIÓN A VIRTUALIZACIÓN Y PROG. DISTRIBUIDA
 
 ## Descripción
 
-Este proyecto consta de un acercamiento basico de la creación de un servicio web que retorna un mensaje ```Hello Docker!``` el cual se va a distribuir en distintos contenedores e imagenes de docker y posteriormente poder desplegar la imagen docker en un servicio ec2 de aws
+Este proyecto consta de un acercamiento básico de la creación de un servicio web que retorna un mensaje ```Hello Docker!``` el cual se va a distribuir en distintos contenedores e imagenes de docker y posteriormente poder desplegar la imagen docker en un servicio ec2 de aws
 
-En el laboratorio se indico crear los contenedores ```firstdockercontainer```, ```firstdockercontainer2``` y ```firstdockercontainer3``` manualmente, pero para facilidad de la prueba se agrego al archivo ```docker-compose.yml``` la configuración necesaria para crear todos los contenedores solo ejecutando el comando ```docker compose up -d```
+## Arquitectura
+
+El proyecto es un servicio web, contenerizado en una instancia docker, que se despliega en un servicio EC2 del cloud aws 
 
 ## Prerrequisitos
 
@@ -29,7 +31,7 @@ java --version
 
 Para realizar la instalcaión de nuestro programa debemos ir a la linea de comandos de nuestro sistema operativo y hacer uso del siguiente comando
 ```
-git clone https://github.com/RichardUG/RoundRobinyLogsService-DockeryAWS.git
+git clone https://github.com/RichardUG/AYGO-Intro-virtualizacion-y-programacion-distribuida.git
 ```
 
 ## Ejecución
@@ -37,35 +39,7 @@ git clone https://github.com/RichardUG/RoundRobinyLogsService-DockeryAWS.git
 Para realizar la ejecución del programa debemos seguir los siguientes pasos:
 
 ```
-cd RoundRobin
-```
-
-```
-mvn clean install
-```
-
-```
-mvn package
-```
-
-```
-cd ..
-```
-
-```
-cd LogService
-```
-
-```
-mvn clean install
-```
-
-```
-mvn package
-```
-
-```
-cd ..
+cd AYGO-Intro-virtualizacion-y-programacion-distribuida
 ```
 
 ```
@@ -81,10 +55,6 @@ mvn package
 Para compilar y verificar que nuestro proyecto se encuentre bien construido debemos seguir los siguientes pasos:
 
 ```
-cd RoundRobin
-```
-
-```
 mvn compile
 ```
 
@@ -92,177 +62,107 @@ mvn compile
 mvn test
 ```
 
-```
-cd ..
-```
+## Despliegue a través del repositorio descargado
+
+Este despliegue lo podemos hacer de dos formas, en ambas los comandos que se van a ejecutar van a ser desde la raiz del repositorio descargado 
+
+* La primera es que vamos a crear primero una imagen y posteriormente 3 contenedores:
+
+    primero vamos a ejecutar el siguiente comando para crear la imagén a través del archivo ```Dockerfile```
+
+    ```
+    docker build -f src/Dockerfile --tag dockersparkprimer .
+    ```
+
+    En nuestro docker desktop podemos ver la imagén creada
+
+    ![](/img/imagenManual.PNG)
+      
+    Ahora vamos a crear los contenedores para la imagén
+
+    ```
+    docker run -d -p 34000:6000 --name firstdockercontainer dockersparkprimer
+    ```
+    ```
+    docker run -d -p 34001:6000 --name firstdockercontainer2 dockersparkprimer
+    ```
+    ```
+    docker run -d -p 34002:6000 --name firstdockercontainer3 dockersparkprimer
+    ```
+
+    En nuestro docker desktop podemos ver los contenedores creados
+
+    ![](/img/contenedoresManual.PNG)  
+  
+    Y podemos consultar las siguientes urls para validar:
+
+  * [http://localhost:34000/hello](http://localhost:34000/hello)
+
+    ![](/img/depliegueManual1.PNG)
+  
+  * [http://localhost:34001/hello](http://localhost:34001/hello)
+
+    ![](/img/depliegueManual2.PNG)
+
+  * [http://localhost:34002/hello](http://localhost:34002/hello)
+
+    ![](/img/depliegueManual3.PNG)
+
+* La segunda es desplegar una imagen y un contenedor a través del archivo ```docker-compose.yml```:
+    
+    Vamos a ejecutar el siguiente comando
+
+    ```
+    docker-compose up -d
+    ```
+
+    En nuestro docker desktop podemos ver la imagen creada y el contenedor creado
+
+    ![](/img/contenedoresManual.PNG)
+
+    Y nos vamos a dirigir a la siguiente url: 
+
+  * [http://localhost:8087/hello](http://localhost:8087/hello)
+
+    ![](/img/depliegueAuto.PNG)
+
+
+## Despliegue a través de la imagén de docker hub
+
+Este despliegue se basa en crear una imagen y un contenedor a raíz de un docker hub, los datos del repositorio de la imagen son los siguientes:
+
+  * Nombre usuario: richardug
+  * Nombe repositorio: firstsprkwebapprepo
+  * Link: [https://hub.docker.com/repository/docker/richardug/firstsprkwebapprepo/general](https://hub.docker.com/repository/docker/richardug/firstsprkwebapprepo/general)
+
+Vamos a ejecutar el siguiente comando
 
 ```
-cd LogService
+docker run -d -p 42000:6000 --name firstdockerimageaws richardug/firstsprkwebapprepo
 ```
 
-```
-mvn compile
-```
-
-```
-mvn test
-```
-
-```
-cd ..
-```
-
-```
-mvn compile
-```
-
-```
-mvn test
-```
-
-## Despliegue en locahost
-
-Lo primero que debemos hacer tras construir nuestro proyecto mvn en nuestro computador es desplegar nuestras imagenes y contenedores, para lo cual en nuestra linea de comandos nos ubicaremos en la carpeta raiz de nuestro proyecto y haremos uso del siguiente comando:
-
-```
-docker-compose up -d
-```
-
-El cual al finalizar de hacer la construcción de las imagenes y los contenedores nos mostrara en consola el siguiente resultado
-
-![](/img/build.PNG)
-
-En consola podemos revisar que nuestras imagenes se hayan creado con el siguiente comando 
+Ahora podemos consultar la imagén creada con el comando
 
 ```
 docker images
 ```
 
-Que nos mostrara el siguiente resultado
-
-![](/img/imagesConsole.PNG)
-
-En consola también podemos revisar que nuestros contenedores se hayan creado con el siguiente comando 
+y el contenedor creado con el comando
 
 ```
 docker ps
 ```
 
-Que nos mostrara el siguiente resultado
+![](/img/CreaAWS.PNG)
 
-![](/img/containersConsole.PNG)
+Trás ejecutar el comando dependiendo si estamos ejecutándolo en aws o en nuestro local la url va a variar:
 
+  * En el caso de ser local la url va a ser la siguiente:
 
-Y si tenemos vista grafica de nuestro docker, en mi caso ```portainer``` también podemos ir a revisar si se encuentran creadas nuestras imagenes, que en este caso son las que se encuentran seleccionadas:
+    [http://localhost:42000/hello](http://localhost:42000/hello)
 
-![](/img/image.PNG)
+  * En el caso de ser en aws la url va a tener la siguiente estructura:
 
-y también podemos revisar que nuestros contenedores esten creados, que son los que se encuentran seleccionados
-
-![](/img/containers.PNG)
-
-## Prueba en localHost
-
-Para acceder a nuestro proyecto desplegado en localhost, consultamos la siguiente URL
-
-[http://localhost:35000](http://localhost:35000)
-
-Que nos mostrara esta pagina
-
-![](/img/localnomensaje.PNG)
-
-Ahora podemos hacer la prueba ingresando dos mensajes
-
-> ### Prueba1
-> 
-> Primer mensaje
-> 
-> ![](/img/prueba1localsinresultado.PNG)
-> 
-> Resultado primer mensaje
-> 
-> ![](/img/prueba1localconresultado.PNG)
-> 
-> ### Prueba2
-> 
-> Segundo mensaje
-> 
-> ![](/img/prueba2localsinresultado.PNG)
-> 
-> Resultado segundo mensaje
-> 
-> ![](/img/prueba2localconresultado.PNG)
-
-
-## Despliegue en AWS
-
-Ahora iniciaremos el proceso para desplegar nuestro proyecto en ```AWS```, par inciar con esto lo primero que debemos hacer es crear un repositorio en ```Docker hub```, para subir nuestro proyecto en él, en mi caso este sera mi repositorio
-
-* Nombre usuario: richardug
-* Nombe repositorio: roundrobinylogservices-dockeryaws
-* Link: [https://hub.docker.com/repository/docker/richardug/roundrobinylogservices-dockeryaw](https://hub.docker.com/repository/docker/richardug/roundrobinylogservices-dockeryaws)
-
-Ahora crearemos nuevos tag para cada una de nuestras imagenes con el nombre de la nueva imagen como "Nombre usuario Docker"/"Nombre repositorio" es decir richardug/roundrobinylogservices-dockeryaws y con tag el nombre de cada recurso, que sera los siguientes comandos:
-
-```
-docker tag roundrobinylogservice-awsydocker_roundrobin:latest richardug/roundrobinylogservices-dockeryaws:roundrobin
-```
-
-```
-docker tag roundrobinylogservice-awsydocker_logservice1:latest richardug/roundrobinylogservices-dockeryaws:logservice1
-```
-
-```
-docker tag roundrobinylogservice-awsydocker_logservice2:latest richardug/roundrobinylogservices-dockeryaws:logservice2
-```
-
-```
-docker tag roundrobinylogservice-awsydocker_logservice3:latest richardug/roundrobinylogservices-dockeryaws:logservice3
-```
-
-```
-docker tag mongo:latest richardug/roundrobinylogservices-dockeryaws:mongo
-```
-
-Lo cual en consola lo veriamos así
-
-![](/img/newtags.PNG)
-
-Y tras ejecutar los  comandos podemos verificar que se hayan creado las imagenes con el siguiente comando
-
-```
-docker images
-```
-
-Y nos mostrara el siguiente resultado
-
-![](/img/newtagsImages.PNG)
-
-Ahora empujaremos las imagenes a nuestro repositorio de ```Docker hub```
-
-
-```
-docker push richardug/roundrobinylogservices-dockeryaws:roundrobin
-```
-
-```
-docker push richardug/roundrobinylogservices-dockeryaws:logservice1
-```
-
-```
-docker push richardug/roundrobinylogservices-dockeryaws:logservice2
-```
-
-```
-docker push richardug/roundrobinylogservices-dockeryaws:logservice3
-```
-
-```
-docker push richardug/roundrobinylogservices-dockeryaws:mongo
-```
-
-Podemos visualizar que las imagenes se hayan subido dirigiendonos a nuestro repositorio en ```Docker hub``` y nos debe mostrar algo así
-
-![](/img/imagesDockerhub.PNG)
-
-
+    ```
+    http://(DNS público maquina EC2):42000/hello
+    ```
