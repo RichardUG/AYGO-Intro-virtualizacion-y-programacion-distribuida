@@ -168,3 +168,11 @@ Trás ejecutar el comando dependiendo si estamos ejecutándolo en aws o en nuest
     ```
 
     ![](/img/despliegueAWS.PNG)
+
+
+## Autor
+[Richard Santiago Urrea Garcia](https://github.com/RichardUG)
+## Licencia & Derechos de Autor
+**©** Richard Santiago Urrea Garcia, Ingeniero de Sistemas
+
+Licencia bajo la [GNU General Public License](https://github.com/RichardUG/AYGO-Intro-virtualizacion-y-programacion-distribuida/blob/main/LICENSE).
